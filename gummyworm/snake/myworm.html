@@ -1,0 +1,85 @@
+<html>
+<head>
+
+	<title>Gummy Worm</title>
+	<link rel="stylesheet" href="bt.css" type="text/css"/>
+	<link rel="stylesheet" href="snake.css" type="text/css"/>
+
+	<script type="text/javascript" src="jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="jquery.storage.js"></script>
+	<script>
+	function getPrefs() {
+		var name = $.localStorage('prefs').name;
+		console.log(name);
+		if (name) {
+			$.get("http://www.cis.gvsu.edu/~gomerc/snake/myworm.php?name="+name, function (responseText) {
+				var data = JSON.parse(responseText).prefs;
+				if (data) {
+					$("#name").val(data.name);
+					$("#style").val(data.style);
+					$("#invert").val(data.inverted);
+					$("#up").val(data.upC);
+					$("#left").val(data.leftC);
+					$("#down").val(data.downC);
+					$("#right").val(data.rightC);
+				} else {
+					$("#name").val("your-name-here");
+					$("#style").val("mario");
+					$("#invert").val("true");
+					$("#up").val("w");
+					$("#left").val("a");
+					$("#down").val("s");
+					$("#right").val("d");
+				}
+			});
+		}
+
+		$("#prefs").submit(function(e) {
+			var prefs = $.localStorage('prefs');
+			prefs.name = $("#name").val();
+			prefs.style = $("style").val();
+			prefs.invert = $("invert").val() == "true";
+			prefs.up = $("upC").val();
+			prefs.left = $("left").val();
+			prefs.right = $("right").val();
+			prefs.down = $("down").val();
+			$.localStorage('prefs', prefs);
+		});
+	}
+</script>
+
+	<style>canvas { width: 100%; height: 100% }</style>
+
+
+</head>
+<body id="body" onLoad="getPrefs()">
+<div style="left: 20%; top: 20%;">	
+<form name="prefs" id="prefs" class="prefs" action="myworm.php" method="get">
+
+<label for="name" val="name" value="name">Name</label>
+<input type="text" name="name" id="name">
+
+<label for="style">Music Style</label>
+<input type="text" name="style" id="style">
+
+<label for="inverted">Invert Controls</label>
+<input type="text" name="invert" id="invert">
+
+<label for="up">Move Up</label>
+<input type="text" name="upC" id="up">
+
+<label for="left">Move Left</label>
+<input type="text" name="leftC" id="left">
+
+<label for="down">Move Down</label>
+<input type="text" name="downC" id="down">
+
+<label for="right">Move Right</label>
+<input type="text" name="rightC" id="right">
+</br>
+<input type="submit" value="Save">
+
+</form>
+</div>
+</body>
+</html>
